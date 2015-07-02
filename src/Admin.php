@@ -7,7 +7,16 @@ use DBisso\Hooker\HookableInterface;
  * Frontend functionality for the plugin.
  */
 class Admin implements HookableInterface {
-	const META_KEY = '_dbisso_hide_coupon_form';
+	/**
+	 * Config object.
+	 *
+	 * @var DBisso\Plugin\WooCommerce\HideCouponForm\Config
+	 */
+	private $config;
+
+	public function __construct( Config $config ) {
+		$this->config = $config;
+	}
 
 	/**
 	 * Add our custom checkbox to the coupon Usage Restriction tab
@@ -16,7 +25,7 @@ class Admin implements HookableInterface {
 		?>
 		<div class="options_group">
 			<?php woocommerce_wp_checkbox( array(
-				'id'          => self::META_KEY,
+				'id'          => $this->config->hide_form_meta_key,
 				'label'       => __( 'Hide coupon form when applied' , 'dbisso-woocommerce-hide-coupon-form' ),
 				'description' => __( 'Check this option if you wish to hide the coupon form on the cart and checkout pages when this coupon is applied to the cart.', 'dbisso-woocommerce-hide-coupon-form' ),
 				'desc_tip'    => true,
@@ -32,8 +41,8 @@ class Admin implements HookableInterface {
 			return;
 		}
 
-		$hide_form = isset( $_POST[ self::META_KEY ] ) ? 'yes' : 'no';
+		$hide_form = isset( $_POST[ $this->config->hide_form_meta_key ] ) ? 'yes' : 'no';
 
-		update_post_meta( $post_id, self::META_KEY, $hide_form );
+		update_post_meta( $post_id, $this->config->hide_form_meta_key, $hide_form );
 	}
 }

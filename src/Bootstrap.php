@@ -21,12 +21,14 @@ class Bootstrap {
 	}
 
 	public function boot() {
+		$this->container['config'] = new Config();
+
 		if ( is_admin() && ! $this->is_ajax() ) {
-			$this->container['admin'] = new Admin();
+			$this->container['admin'] = new Admin( $this->container['config'] );
 		}
 
 		if ( ! is_admin() || $this->is_ajax() ) {
-			$this->container['frontend'] = new Frontend();
+			$this->container['frontend'] = new Frontend( $this->container['config'] );
 		}
 
 		$this->hook();
