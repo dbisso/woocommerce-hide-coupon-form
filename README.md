@@ -1,0 +1,1 @@
+# woocommerce-hide-coupon-form
